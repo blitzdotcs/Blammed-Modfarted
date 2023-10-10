@@ -10,6 +10,9 @@ using StringTools;
 
 class Note extends FlxSprite
 {
+  	public var mesh:modcharting.SustainStrip = null;
+  	public var z:Float = 0;
+
 	public var strumTime:Float = 0;
 
 	public var mustPress:Bool = false;
@@ -29,9 +32,6 @@ class Note extends FlxSprite
 	public static var GREEN_NOTE:Int = 2;
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
-
-  	public var mesh:modcharting.SustainStrip = null;
-  	public var z:Float = 0;
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{

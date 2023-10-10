@@ -52,7 +52,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
-
+	public static var instance:PlayState;
 	var halloweenLevel:Bool = false;
 
 	private var vocals:FlxSound;
@@ -71,8 +71,8 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
-	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	private var playerStrums:FlxTypedGroup<FlxSprite>;
+	public var strumLineNotes:FlxTypedGroup<FlxSprite>;
+	public var playerStrums:FlxTypedGroup<FlxSprite>;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -640,13 +640,13 @@ class PlayState extends MusicBeatState
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 
-  		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
-  		playfieldRenderer.cameras = [camHUD];
-  		add(playfieldRenderer);
-
 		// startCountdown();
 
 		generateSong(SONG.song);
+
+  		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
+  		playfieldRenderer.cameras = [camHUD];
+  		add(playfieldRenderer);
 
 		// add(strumLine);
 
