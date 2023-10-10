@@ -36,10 +36,10 @@ class NoteMovement
         defaultStrumY = []; 
         defaultScale = [];
         arrowSizes = [];
-        keyCount = PlayState.strumLineNotes.length-PlayState.playerStrums.length;
-        playerKeyCount = PlayState.playerStrums.length;
+        keyCount = strumLineNotes.length-playerStrums.length;
+        playerKeyCount = playerStrums.length;
 
-        for (i in 0...PlayState.strumLineNotes.members.length)
+        for (i in 0...strumLineNotes.members.length)
         {
             var strum = PlayState.strumLineNotes.members[i];
             defaultStrumX.push(strum.x);
