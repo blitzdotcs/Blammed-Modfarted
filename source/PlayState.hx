@@ -38,6 +38,9 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
+import modcharting.ModchartFuncs;
+import modcharting.NoteMovement;
+import modcharting.PlayfieldRenderer;
 
 using StringTools;
 
@@ -637,6 +640,10 @@ class PlayState extends MusicBeatState
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 
+  		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
+  		playfieldRenderer.cameras = [camHUD];
+  		add(playfieldRenderer);
+
 		// startCountdown();
 
 		generateSong(SONG.song);
@@ -860,6 +867,8 @@ class PlayState extends MusicBeatState
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
+
+  		NoteMovement.getDefaultStrumPos(this);
 
 		talking = false;
 		startedCountdown = true;
