@@ -46,7 +46,6 @@ class NoteMovement
 
     public static function getDefaultStrumPosEditor(game:ModchartEditorState)
     {
-        #if ((PSYCH || LEATHER) && !DISABLE_MODCHART_EDITOR)
         defaultStrumX = []; //reset
         defaultStrumY = []; 
         defaultScale = [];
