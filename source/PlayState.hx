@@ -672,7 +672,7 @@ class PlayState extends MusicBeatState
 		FlxG.fixedTimestep = false;
 
 		// WIN SPRITE SHIT <3
-		WinSpriteLol = new FlxSprite(0, FlxG.height * 0.9).loadGraphic('assets/images/mfengine/ui/winsprite.png');
+		WinSpriteLol = new FlxSprite(0, FlxG.height * 0.0).loadGraphic('assets/images/mfengine/ui/winsprite.png');
 		WinSpriteLol.screenCenter(X);
 		WinSpriteLol.scrollFactor.set();
 		WinSpriteLol.visible = false;
