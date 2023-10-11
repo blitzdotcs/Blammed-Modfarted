@@ -9,7 +9,7 @@ import flixel.FlxG;
 import states.PlayState;
 import game.Note;
 
-#else
+#else 
 import PlayState;
 import Note;
 #end
@@ -36,10 +36,10 @@ class NoteMovement
         defaultStrumY = []; 
         defaultScale = [];
         arrowSizes = [];
-        keyCount = strumLineNotes.length-playerStrums.length;
-        playerKeyCount = playerStrums.length;
+        keyCount = PlayState.strumLineNotes.length-PlayState.playerStrums.length;
+        playerKeyCount = PlayState.playerStrums.length;
 
-        for (i in 0...strumLineNotes.members.length)
+        for (i in 0...PlayState.strumLineNotes.members.length)
         {
             var strum = PlayState.strumLineNotes.members[i];
             defaultStrumX.push(strum.x);
@@ -61,12 +61,12 @@ class NoteMovement
         defaultStrumY = []; 
         defaultScale = [];
         arrowSizes = [];
-        keyCount = PlayState.strumLineNotes.length-PlayState.playerStrums.length; //base game doesnt have opponent strums as group
-        playerKeyCount = PlayState.playerStrums.length;
+        keyCount = game.strumLineNotes.length-game.playerStrums.length; //base game doesnt have opponent strums as group
+        playerKeyCount = game.playerStrums.length;
 
-        for (i in 0...PlayState.strumLineNotes.members.length)
+        for (i in 0...game.strumLineNotes.members.length)
         {
-            var strum = PlayState.strumLineNotes.members[i];
+            var strum = game.strumLineNotes.members[i];
             defaultStrumX.push(strum.x);
             defaultStrumY.push(strum.y);
             #if LEATHER
@@ -114,4 +114,7 @@ class NoteMovement
 
         return col;
     }
+
+
 }
+
