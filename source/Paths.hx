@@ -1,4 +1,3 @@
-// THIS IS ONLY USED SO THE MODCHART CAN LOAD
 package;
 
 import flixel.FlxG;
@@ -7,10 +6,12 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 import lime.utils.Assets;
 import flixel.FlxSprite;
+#if desktop
 import sys.io.File;
 import sys.FileSystem;
 import flixel.graphics.FlxGraphic;
 import openfl.display.BitmapData;
+#end
 
 import flash.media.Sound;
 

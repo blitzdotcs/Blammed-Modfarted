@@ -28,8 +28,23 @@ class DialogueBox extends FlxSpriteGroup
 
 	public var finishThing:Void->Void;
 
+
+	//15 portraits lol
 	var portraitLeft:FlxSprite;
 	var portraitRight:FlxSprite;
+	var gfportrait:FlxSprite;
+	var gf2Portrait:FlxSprite;
+	var bfportrait:FlxSprite;
+	var dadPortrait:FlxSprite;
+	var pumpPortrait:FlxSprite;
+	var skidPortrait:FlxSprite;
+	var picoPortrait:FlxSprite;
+	var pico2Portrait:FlxSprite;
+	var momPortrait:FlxSprite;
+	var parentsMomPortrait:FlxSprite;
+	var parentsDadPortrait:FlxSprite;
+	var parentsPortrait:FlxSprite;
+	var monsterPortrait:FlxSprite;
 
 	var handSelect:FlxSprite;
 	var bgFade:FlxSprite;
@@ -41,10 +56,10 @@ class DialogueBox extends FlxSpriteGroup
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'senpai':
-				FlxG.sound.playMusic('assets/music/Lunchbox' + TitleState.soundExt, 0);
+				FlxG.sound.playMusic(Paths.music('Lunchbox'), 0);
 				FlxG.sound.music.fadeIn(1, 0, 0.8);
 			case 'thorns':
-				FlxG.sound.playMusic('assets/music/LunchboxScary' + TitleState.soundExt, 0);
+				FlxG.sound.playMusic(Paths.music('LunchboxScary'), 0);
 				FlxG.sound.music.fadeIn(1, 0, 0.8);
 		}
 
@@ -60,8 +75,53 @@ class DialogueBox extends FlxSpriteGroup
 				bgFade.alpha = 0.7;
 		}, 5);
 
+		box = new FlxSprite(-20, 45);
+		
+		var hasDialog = false;
+		switch (PlayState.SONG.song.toLowerCase())
+		{
+			case 'senpai':
+				hasDialog = true;
+				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel');
+				box.animation.addByPrefix('normalOpen', 'Text Box Appear', 24, false);
+				box.animation.addByIndices('normal', 'Text Box Appear', [4], "", 24);
+			case 'roses':
+				hasDialog = true;
+				FlxG.sound.play(Paths.sound('ANGRY_TEXT_BOX'));
+
+				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-senpaiMad');
+				box.animation.addByPrefix('normalOpen', 'SENPAI ANGRY IMPACT SPEECH', 24, false);
+				box.animation.addByIndices('normal', 'SENPAI ANGRY IMPACT SPEECH', [4], "", 24);
+
+			case 'thorns':
+				hasDialog = true;
+				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-evil');
+				box.animation.addByPrefix('normalOpen', 'Spirit Textbox spawn', 24, false);
+				box.animation.addByIndices('normal', 'Spirit Textbox spawn', [11], "", 24);
+
+				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic(Paths.loadImage('weeb/spiritFaceForward'));
+				face.setGraphicSize(Std.int(face.width * 6));
+				add(face);
+
+			default:
+				hasDialog = true;
+				box.frames = Paths.getSparrowAtlas('speech_bubble_talking', 'shared');
+				box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
+				box.animation.addByIndices('normal', 'speech bubble normal', [4], "", 24);
+				box.width = 200;
+				box.height = 100;
+				box.x = -100;	 
+				box.y = 375;
+				box.flipX = true;				
+		}
+
+		this.dialogueList = dialogueList;
+		
+		if (!hasDialog)
+			return;
+		
 		portraitLeft = new FlxSprite(-20, 40);
-		portraitLeft.frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/senpaiPortrait.png', 'assets/images/weeb/senpaiPortrait.xml');
+		portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
 		portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
 		portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
 		portraitLeft.updateHitbox();
@@ -70,7 +130,7 @@ class DialogueBox extends FlxSpriteGroup
 		portraitLeft.visible = false;
 
 		portraitRight = new FlxSprite(0, 40);
-		portraitRight.frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/bfPortrait.png', 'assets/images/weeb/bfPortrait.xml');
+		portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
 		portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
 		portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
 		portraitRight.updateHitbox();
@@ -78,43 +138,135 @@ class DialogueBox extends FlxSpriteGroup
 		add(portraitRight);
 		portraitRight.visible = false;
 
-		box = new FlxSprite(-20, 45);
+		gfportrait = new FlxSprite(-20, 40);
+		gfportrait.frames = Paths.getSparrowAtlas('Portraits/gfPortrait', 'shared');
+		gfportrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//gfportrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		gfportrait.updateHitbox();
+		gfportrait.scrollFactor.set();
+		add(gfportrait);
+		gfportrait.visible = false;	
 
-		switch (PlayState.SONG.song.toLowerCase())
-		{
-			case 'senpai':
-				box.frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/pixelUI/dialogueBox-pixel.png',
-					'assets/images/weeb/pixelUI/dialogueBox-pixel.xml');
-				box.animation.addByPrefix('normalOpen', 'Text Box Appear', 24, false);
-				box.animation.addByIndices('normal', 'Text Box Appear', [4], "", 24);
-			case 'roses':
-				FlxG.sound.play('assets/sounds/ANGRY_TEXT_BOX' + TitleState.soundExt);
+		bfportrait = new FlxSprite(-20, 40);
+		bfportrait.frames = Paths.getSparrowAtlas('Portraits/boyfriendPortrait', 'shared');
+		bfportrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//bfportrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		bfportrait.updateHitbox();
+		bfportrait.scrollFactor.set();
+		add(bfportrait);
+		bfportrait.visible = false;		
 
-				box.frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/pixelUI/dialogueBox-senpaiMad.png',
-					'assets/images/weeb/pixelUI/dialogueBox-senpaiMad.xml');
-				box.animation.addByPrefix('normalOpen', 'SENPAI ANGRY IMPACT SPEECH', 24, false);
-				box.animation.addByIndices('normal', 'SENPAI ANGRY IMPACT SPEECH', [4], "", 24);
+		dadPortrait = new FlxSprite(-20, 40);
+		dadPortrait.frames = Paths.getSparrowAtlas('Portraits/dadPortrait', 'shared');
+		dadPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//dadPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		dadPortrait.updateHitbox();
+		dadPortrait.scrollFactor.set();
+		add(dadPortrait);
+		dadPortrait.visible = false;
+		
+		pumpPortrait = new FlxSprite(-20, 40);
+		pumpPortrait.frames = Paths.getSparrowAtlas('Portraits/pumpPortrait', 'shared');
+		pumpPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//pumpPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		pumpPortrait.updateHitbox();
+		pumpPortrait.scrollFactor.set();
+		add(pumpPortrait);
+		pumpPortrait.visible = false;
 
-			case 'thorns':
-				box.frames = FlxAtlasFrames.fromSparrow('assets/images/weeb/pixelUI/dialogueBox-evil.png', 'assets/images/weeb/pixelUI/dialogueBox-evil.xml');
-				box.animation.addByPrefix('normalOpen', 'Spirit Textbox spawn', 24, false);
-				box.animation.addByIndices('normal', 'Spirit Textbox spawn', [11], "", 24);
+		skidPortrait = new FlxSprite(-20, 40);
+		skidPortrait.frames = Paths.getSparrowAtlas('Portraits/skidPortrait', 'shared');
+		skidPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//skidPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		skidPortrait.updateHitbox();
+		skidPortrait.scrollFactor.set();
+		add(skidPortrait);
+		skidPortrait.visible = false;
 
-				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic('assets/images/weeb/spiritFaceForward.png');
-				face.setGraphicSize(Std.int(face.width * 6));
-				add(face);
-		}
+		picoPortrait = new FlxSprite(-20, 40);
+		picoPortrait.frames = Paths.getSparrowAtlas('Portraits/picoPortrait', 'shared');
+		picoPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//picoPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		picoPortrait.updateHitbox();
+		picoPortrait.scrollFactor.set();
+		add(picoPortrait);
+		picoPortrait.visible = false;
+
+		pico2Portrait = new FlxSprite(-20, 40);
+		pico2Portrait.frames = Paths.getSparrowAtlas('Portraits/picoAngryPortrait', 'shared');
+		pico2Portrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//pico2Portrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		pico2Portrait.updateHitbox();
+		pico2Portrait.scrollFactor.set();
+		add(pico2Portrait);
+		pico2Portrait.visible = false;
+
+		gf2Portrait = new FlxSprite(-20, 40);
+		gf2Portrait.frames = Paths.getSparrowAtlas('Portraits/gfCheerPortrait', 'shared');
+		gf2Portrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//gf2Portrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		gf2Portrait.updateHitbox();
+		gf2Portrait.scrollFactor.set();
+		add(gf2Portrait);
+		gf2Portrait.visible = false;
+		
+		momPortrait = new FlxSprite(-20, 40);
+		momPortrait.frames = Paths.getSparrowAtlas('Portraits/momPortrait', 'shared');
+		momPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//momPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		momPortrait.updateHitbox();
+		momPortrait.scrollFactor.set();
+		add(momPortrait);
+		momPortrait.visible = false;	
+
+		parentsMomPortrait = new FlxSprite(-20, 40);
+		parentsMomPortrait.frames = Paths.getSparrowAtlas('Portraits/parentsMomPortrait', 'shared');
+		parentsMomPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//parentsMomPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		parentsMomPortrait.updateHitbox();
+		parentsMomPortrait.scrollFactor.set();
+		add(parentsMomPortrait);
+		parentsMomPortrait.visible = false;	
+
+		parentsDadPortrait = new FlxSprite(-20, 40);
+		parentsDadPortrait.frames = Paths.getSparrowAtlas('Portraits/parentsDadPortrait', 'shared');
+		parentsDadPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//parentsDadPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		parentsDadPortrait.updateHitbox();
+		parentsDadPortrait.scrollFactor.set();
+		add(parentsDadPortrait);
+		parentsDadPortrait.visible = false;	
+
+		parentsPortrait = new FlxSprite(-20, 40);
+		parentsPortrait.frames = Paths.getSparrowAtlas('Portraits/parentsPortrait', 'shared');
+		parentsPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//parentsPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		parentsPortrait.updateHitbox();
+		parentsPortrait.scrollFactor.set();
+		add(parentsPortrait);
+		parentsPortrait.visible = false;
+
+		monsterPortrait = new FlxSprite(-20, 40);
+		monsterPortrait.frames = Paths.getSparrowAtlas('Portraits/christmasLemonPortrait', 'shared');
+		monsterPortrait.animation.addByPrefix('enter', 'Portrait Enter instance', 24, false);
+		//monsterPortrait.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+		monsterPortrait.updateHitbox();
+		monsterPortrait.scrollFactor.set();
+		add(monsterPortrait);
+		monsterPortrait.visible = false;																								
+		
 
 		box.animation.play('normalOpen');
 		box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
 		box.updateHitbox();
 		add(box);
 
-		handSelect = new FlxSprite(FlxG.width * 0.9, FlxG.height * 0.9).loadGraphic('assets/images/weeb/pixelUI/hand_textbox.png');
-		add(handSelect);
-
 		box.screenCenter(X);
 		portraitLeft.screenCenter(X);
+
+		handSelect = new FlxSprite(FlxG.width * 0.9, FlxG.height * 0.9).loadGraphic(Paths.loadImage('weeb/pixelUI/hand_textbox'));
+		add(handSelect);
+
 
 		if (!talkingRight)
 		{
@@ -129,14 +281,12 @@ class DialogueBox extends FlxSpriteGroup
 		swagDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
 		swagDialogue.font = 'Pixel Arial 11 Bold';
 		swagDialogue.color = 0xFF3F2021;
-		swagDialogue.sounds = [FlxG.sound.load('assets/sounds/pixelText' + TitleState.soundExt, 0.6)];
+		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
 		add(swagDialogue);
 
 		dialogue = new Alphabet(0, 80, "", false, true);
 		// dialogue.x = 90;
 		// add(dialogue);
-
-		this.dialogueList = dialogueList;
 	}
 
 	var dialogueOpened:Bool = false;
@@ -171,11 +321,11 @@ class DialogueBox extends FlxSpriteGroup
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ANY  && dialogueStarted == true)
+		if (FlxG.keys.justPressed.ANY && dialogueStarted == true)
 		{
 			remove(dialogue);
 				
-			FlxG.sound.play('assets/sounds/clickText' + TitleState.soundExt, 0.8);
+			FlxG.sound.play(Paths.sound('clickText'), 0.8);
 
 			if (dialogueList[1] == null && dialogueList[0] != null)
 			{
@@ -229,19 +379,320 @@ class DialogueBox extends FlxSpriteGroup
 		switch (curCharacter)
 		{
 			case 'dad':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
 				portraitRight.visible = false;
+				portraitLeft.visible = false;
 				if (!portraitLeft.visible)
 				{
 					portraitLeft.visible = true;
 					portraitLeft.animation.play('enter');
 				}
 			case 'bf':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
 				portraitLeft.visible = false;
 				if (!portraitRight.visible)
 				{
 					portraitRight.visible = true;
 					portraitRight.animation.play('enter');
 				}
+			case 'gf':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!gfportrait.visible)
+				{
+					gfportrait.visible = true;
+					gfportrait.animation.play('enter');
+				}
+			case 'boyfriend':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!bfportrait.visible)
+				{
+					bfportrait.visible = true;
+					bfportrait.animation.play('enter');
+				}
+			case 'dearest':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!dadPortrait.visible)
+				{
+					dadPortrait.visible = true;
+					dadPortrait.animation.play('enter');
+				}
+			case 'skid':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!skidPortrait.visible)
+				{
+					skidPortrait.visible = true;
+					skidPortrait.animation.play('enter');
+				}	
+			case 'pump':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!pumpPortrait.visible)
+				{
+					pumpPortrait.visible = true;
+					pumpPortrait.animation.play('enter');
+				}
+			case 'pico':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!picoPortrait.visible)
+				{
+					picoPortrait.visible = true;
+					picoPortrait.animation.play('enter');
+				}
+			case 'pico-angry':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!pico2Portrait.visible)
+				{
+					pico2Portrait.visible = true;
+					pico2Portrait.animation.play('enter');
+				}	
+			case 'gf-cheer':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!gf2Portrait.visible)
+				{
+					gf2Portrait.visible = true;
+					gf2Portrait.animation.play('enter');
+				}																
+			case 'mom':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!momPortrait.visible)
+				{
+					momPortrait.visible = true;
+					momPortrait.animation.play('enter');
+				}
+			case 'parentsDad':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!parentsDadPortrait.visible)
+				{
+					parentsDadPortrait.visible = true;
+					parentsDadPortrait.animation.play('enter');
+				}
+			case 'parentsMom':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!parentsMomPortrait.visible)
+				{
+					parentsMomPortrait.visible = true;
+					parentsMomPortrait.animation.play('enter');
+				}
+			case 'parents':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!parentsPortrait.visible)
+				{
+					parentsPortrait.visible = true;
+					parentsPortrait.animation.play('enter');
+				}
+			case 'christmasLemon':
+				monsterPortrait.visible = false;
+				parentsPortrait.visible = false;
+				parentsMomPortrait.visible = false;
+				parentsDadPortrait.visible = false;
+				momPortrait.visible = false;
+				gf2Portrait.visible = false;
+				pico2Portrait.visible = false;
+				picoPortrait.visible = false;
+				pumpPortrait.visible = false;
+				skidPortrait.visible = false;
+				dadPortrait.visible = false;
+				gfportrait.visible = false;
+				bfportrait.visible = false;
+				portraitRight.visible = false;
+				portraitLeft.visible = false;
+				if (!monsterPortrait.visible)
+				{
+					monsterPortrait.visible = true;
+					monsterPortrait.animation.play('enter');
+				}																						
 		}
 	}
 

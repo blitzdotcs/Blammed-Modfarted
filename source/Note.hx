@@ -1,10 +1,14 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+#if polymod
 import polymod.format.ParseRules.TargetSignatureElement;
+#end
+import PlayState;
 
 using StringTools;
 
@@ -43,80 +47,96 @@ class Note extends FlxSprite
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 
-		x += 50;
-		// MAKE SURE ITS DEFINITELY OFF SCREEN?
-		y -= 2000;
+		x += (FlxG.save.data.middleScroll ? -218.8 : 50);
+		y -= 9999;
 		this.strumTime = strumTime;
 
 		this.noteData = noteData;
 
 		var daStage:String = PlayState.curStage;
 
-		switch (daStage)
+		switch (PlayState.SONG.noteStyle)
 		{
-			case 'school' | 'schoolEvil':
-				loadGraphic('assets/images/weeb/pixelUI/arrows-pixels.png', true, 17, 17);
+			case 'pixel':
+				loadGraphic(Paths.loadImage('weeb/pixelUI/arrows-pixels','week6'), true, 17, 17);
 
 				animation.add('greenScroll', [6]);
 				animation.add('redScroll', [7]);
 				animation.add('blueScroll', [5]);
 				animation.add('purpleScroll', [4]);
 
+				animation.add('purplehold', [0]);
+				animation.add('greenhold', [2]);
+				animation.add('redhold', [3]);
+				animation.add('bluehold', [1]);
+
 				if (isSustainNote)
 				{
-					loadGraphic('assets/images/weeb/pixelUI/arrowEnds.png', true, 7, 6);
+					loadGraphic(Paths.loadImage('weeb/pixelUI/arrowEnds','week6'), true, 7, 6);
 
-					animation.add('purpleholdend', [4]);
-					animation.add('greenholdend', [6]);
-					animation.add('redholdend', [7]);
-					animation.add('blueholdend', [5]);
-
-					animation.add('purplehold', [0]);
-					animation.add('greenhold', [2]);
-					animation.add('redhold', [3]);
-					animation.add('bluehold', [1]);
+					if(!FlxG.save.data.downscroll)
+						{
+							animation.add('purpleholdend', [4]);
+							animation.add('greenholdend', [6]);
+							animation.add('redholdend', [7]);
+							animation.add('blueholdend', [5]);
+						}else {
+							animation.add('purpleholdend', [4], 0, false, false, true);
+							animation.add('greenholdend', [6], 0, false, false, true);
+							animation.add('redholdend', [7], 0, false, false, true);
+							animation.add('blueholdend', [5], 0, false, false, true);
+						}
 				}
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
-
 			default:
-				frames = FlxAtlasFrames.fromSparrow('assets/images/NOTE_assets.png', 'assets/images/NOTE_assets.xml');
+				frames = Paths.getSparrowAtlas('NOTE_assets');
 
 				animation.addByPrefix('greenScroll', 'green0');
 				animation.addByPrefix('redScroll', 'red0');
 				animation.addByPrefix('blueScroll', 'blue0');
 				animation.addByPrefix('purpleScroll', 'purple0');
 
-				animation.addByPrefix('purpleholdend', 'pruple end hold');
-				animation.addByPrefix('greenholdend', 'green hold end');
-				animation.addByPrefix('redholdend', 'red hold end');
-				animation.addByPrefix('blueholdend', 'blue hold end');
-
 				animation.addByPrefix('purplehold', 'purple hold piece');
 				animation.addByPrefix('greenhold', 'green hold piece');
 				animation.addByPrefix('redhold', 'red hold piece');
 				animation.addByPrefix('bluehold', 'blue hold piece');
+
+				if(!FlxG.save.data.downscroll)
+				{
+					animation.addByPrefix('purpleholdend', 'pruple end hold');
+					animation.addByPrefix('greenholdend', 'green hold end');
+					animation.addByPrefix('redholdend', 'red hold end');
+					animation.addByPrefix('blueholdend', 'blue hold end');
+				}else {
+					animation.addByPrefix('purpleholdend', 'pruple end hold', 0, false, false, true);
+					animation.addByPrefix('greenholdend', 'green hold end', 0, false, false, true);
+					animation.addByPrefix('redholdend', 'red hold end', 0, false, false, true);
+					animation.addByPrefix('blueholdend', 'blue hold end', 0, false, false, true);
+				}
 
 				setGraphicSize(Std.int(width * 0.7));
 				updateHitbox();
 				antialiasing = true;
 		}
 
-		switch (noteData)
-		{
-			case 0:
-				x += swagWidth * 0;
-				animation.play('purpleScroll');
-			case 1:
-				x += swagWidth * 1;
-				animation.play('blueScroll');
-			case 2:
-				x += swagWidth * 2;
-				animation.play('greenScroll');
-			case 3:
-				x += swagWidth * 3;
-				animation.play('redScroll');
+                x += swagWidth * (noteData % 4);
+		if(!isSustainNote) { //Doing this 'if' check to fix the warnings on Senpai songs
+			var animToPlay:String = '';
+			switch (noteData)
+			{
+				case 0:
+					animToPlay = 'purple';
+				case 1:
+					animToPlay = 'blue';
+				case 2:
+					animToPlay = 'green';
+				case 3:
+					animToPlay = 'red';
+			}
+			animation.play(animToPlay + 'Scroll');
+
 		}
 
 		// trace(prevNote);
@@ -161,7 +181,7 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				//prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
@@ -174,16 +194,13 @@ class Note extends FlxSprite
 
 		if (mustPress)
 		{
-			// The * 0.5 us so that its easier to hit them too late, instead of too early
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
-			{
+			// The * 0.5 is so that it's easier to hit them too late, instead of too early
+			if (strumTime >= Conductor.songPosition - (Conductor.safeZoneOffset * 1.5) && strumTime <= Conductor.songPosition + (Conductor.safeZoneOffset * (isSustainNote ? 0.5 : 1)))
 				canBeHit = true;
-			}
 			else
 				canBeHit = false;
 
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset)
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
 				tooLate = true;
 		}
 		else
@@ -191,9 +208,7 @@ class Note extends FlxSprite
 			canBeHit = false;
 
 			if (strumTime <= Conductor.songPosition)
-			{
 				wasGoodHit = true;
-			}
 		}
 
 		if (tooLate)

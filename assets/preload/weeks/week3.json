@@ -1,0 +1,20 @@
+{
+	"songs": [
+		["Blammed", "pico", [148, 22, 83]]
+	],
+
+	"weekCharacters": [
+		"pico",
+		"bf",
+		"gf"
+	],
+	"weekBackground": "philly",
+
+	"storyName": "blammed",
+	"weekBefore": "week2",
+	"weekName": "Get Modfarted bf fnf",
+	"startUnlocked": true,
+
+	"hideStoryMode": false,
+	"hideFreeplay": false
+}

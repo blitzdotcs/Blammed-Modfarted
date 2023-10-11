@@ -5,7 +5,11 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.effects.FlxFlicker;
 import lime.app.Application;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxTimer;
 
 class OutdatedSubState extends MusicBeatState
 {
@@ -14,31 +18,28 @@ class OutdatedSubState extends MusicBeatState
 	override function create()
 	{
 		super.create();
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.loadImage('outdatedthing'));
+		bg.scale.x *= 1.55;
+		bg.scale.y *= 1.55;
+		bg.screenCenter();
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
-		var ver = "v" + Application.current.meta.get('version');
-		var txt:FlxText = new FlxText(0, 0, FlxG.width,
-			"HEY! You're running an outdated version of the game!\nCurrent version is "
-			+ ver
-			+ " while the most recent version is "
-			+ NGio.GAME_VER
-			+ "! Press Space to go to itch.io, or ESCAPE to ignore this!!",
-			32);
-		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
-		txt.screenCenter();
-		add(txt);
 	}
 
 	override function update(elapsed:Float)
 	{
-		if (controls.ACCEPT)
-		{
-			FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
-		}
-		if (controls.BACK)
-		{
-			leftState = true;
-			FlxG.switchState(new MainMenuState());
+		if(!leftState) {
+			if (controls.ACCEPT) {
+				CoolUtil.browserLoad("https://github.com/TyDevX/FX-Engine/releases");
+			}
+			else if(controls.BACK) {
+				leftState = true;
+			}
+
+			if(leftState)
+			{
+				FlxG.switchState(new MainMenuState());
+			}
 		}
 		super.update(elapsed);
 	}
