@@ -9,7 +9,8 @@ import flixel.FlxG;
 import states.PlayState;
 import game.Note;
 
-#else 
+#else
+import PlayState;
 import Note;
 #end
 
