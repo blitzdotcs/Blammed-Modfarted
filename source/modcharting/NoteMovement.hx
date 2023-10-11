@@ -18,12 +18,6 @@ using StringTools;
 
 class NoteMovement
 {
-
-    // Fucking heck
-    public var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	public var playerStrums:FlxTypedGroup<FlxSprite>;
-
-    // Un-fucking heck
     public static var keyCount = 4;
     public static var playerKeyCount = 4;
     public static var totalKeyCount = 8;
