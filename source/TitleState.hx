@@ -436,7 +436,7 @@ class TitleState extends MusicBeatState
 			case 16:
 				deleteCoolText();				
 			case 17:
-				addMoreText('FX');
+				addMoreText('ModFarted');
 			case 18:
 				addMoreText('Engine');	
 			case 19:
@@ -456,7 +456,7 @@ class TitleState extends MusicBeatState
 			case 26:
 			    // so sum else again lmaoz		
 			case 27:
-			    addMoreText('Gettin freaky');
+			    addMoreText('Gettin Gettin freaky');
 			case 28:
 			    addMoreText('on a friday night');																												
 			case 29:
