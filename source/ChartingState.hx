@@ -32,11 +32,12 @@ import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
-#if MODS_ALLOWED
+#if desktop
 import sys.io.File;
 import sys.FileSystem;
 import flash.media.Sound;
 #end
+import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 

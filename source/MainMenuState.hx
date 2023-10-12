@@ -108,7 +108,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "FUNKIN " + Application.current.meta.get('version') + " | FX Engine " + engineVer, 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "FUNKIN " + Application.current.meta.get('version') + " | ModFarted Engine " + engineVer, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -212,15 +212,6 @@ class MainMenuState extends MusicBeatState
 					});
 				}
 			}
-		}
-
-		if (FlxG.keys.justPressed.SEVEN)
-		{
-			FlxG.switchState(new extrashit.Menu());
-	
-			#if desktop
-			DiscordClient.changePresence("In the config menu", null, null, true);
-			#end
 		}
 
 		super.update(elapsed);

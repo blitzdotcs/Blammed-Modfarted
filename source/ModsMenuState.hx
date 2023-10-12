@@ -1,3 +1,4 @@
+#if MODS_ALLOWED
 package;
 
 #if desktop
@@ -726,3 +727,4 @@ class ModMetadata
 		}
 	}
 }
+#end
