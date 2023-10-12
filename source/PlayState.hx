@@ -59,6 +59,13 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
+
+	// NOTECOMBO SHIT LOL
+	var focusshit:String = '';
+	var notecomboSpritelol:FlxSprite;
+	var focusfornotecombo:String = 'dad';
+	var coolcombo:Int = 0;
+
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
@@ -931,12 +938,12 @@ class PlayState extends MusicBeatState
 		FlxG.fixedTimestep = false;
 
 		// WIN SPRITE SHIT <3
-		WinSpriteLol = new FlxSprite(0, 0, "assets/images/mfengine/ui/WinSprite.png");
-		WinSpriteLol.frames = Paths.getSparrowAtlas('mfengine/ui/WinSprite.png');
+		WinSpriteLol = new FlxSprite(0, 0, "assets/images/mfengine/ui/win_asset.png");
 		WinSpriteLol.screenCenter(X);
 		WinSpriteLol.scrollFactor.set();
-		WinSpriteLol.animation.addByPrefix('idle', 'wewinning', 24, false);
-		WinSpriteLol.visible = true;	
+		WinSpriteLol.visible = false;
+		WinSpriteLol.animation.addByPrefix('winlol', 'win! instance', 24, false);
+        WinSpriteLol.animation.play('winlol');		
 		add(WinSpriteLol);
 
 		healthBarBG = new FlxSprite(!FlxG.save.data.quaverbar ? 0 : FlxG.width, !FlxG.save.data.quaverbar ? FlxG.height * 0.88 : 0).loadGraphic(Paths.loadImage('healthBar'));
@@ -968,6 +975,16 @@ class PlayState extends MusicBeatState
 		timeTxt.borderSize = 2;
 		if(FlxG.save.data.downscroll) timeTxt.y = FlxG.height - 45;
 		add(timeTxt);
+
+		notecomboSpritelol = new FlxSprite().loadGraphic(Paths.image('noteCombo'));
+		notecomboSpritelol.frames = Paths.getSparrowAtlas('noteCombo');
+		notecomboSpritelol.scale.set(0.6, 0.6);
+		notecomboSpritelol.x = boyfriend.x + boyfriend.width - notecomboSpritelol.width;
+		notecomboSpritelol.y = (boyfriend.y + boyfriend.height) / 4;
+		notecomboSpritelol.visible = !ClientPrefs.hideHud;
+		notecomboSpritelol.alpha = 0.00001;
+		notecomboSpritelol.animation.addByPrefix('appear', 'NoteCombofix', 24, false);
+		add(notecomboSpritelol);
 
 		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 250, healthBarBG.y + 30, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
@@ -1664,6 +1681,9 @@ class PlayState extends MusicBeatState
 
 	public var stopUpdate = false;
 
+	var numbernotecomboSpritelol:FlxSprite;
+	var spritenoob:Array<FlxSprite> = [];
+
 	override public function update(elapsed:Float)
 	{
 		//		trace(health);
@@ -1695,6 +1715,44 @@ class PlayState extends MusicBeatState
 			else
 				iconP1.animation.play('bf-old');
 		}
+
+		if(focusfornotecombo != focusshit && focusshit != 'none' && coolcombo > 0){
+			//sikenumcombo(coolcombo); //haha bug
+			var loop:Int = 1;
+			var seperatedNoteCombo:Array<String> = Std.string(coolcombo).split("");
+			for (i in seperatedNoteCombo){
+				numbernotecomboSpritelol = new FlxSprite().loadGraphic(Paths.image('noteComboNumbers'));
+				numbernotecomboSpritelol.frames = Paths.getSparrowAtlas('noteComboNumbers');
+				numbernotecomboSpritelol.scale.set(0.6, 0.6);
+				numbernotecomboSpritelol.x = boyfriend.x + boyfriend.width - notecomboSpritelol.width + (loop * 100) + 200; 
+				numbernotecomboSpritelol.x -= 90 * (seperatedNoteCombo.length - 1);
+				numbernotecomboSpritelol.y = (boyfriend.y + boyfriend.height) / 4 + 112.5 - (loop * 25);
+				numbernotecomboSpritelol.visible = !ClientPrefs.hideHud;
+				numbernotecomboSpritelol.updateHitbox();
+				numbernotecomboSpritelol.animation.addByPrefix('appear', i + '_appear', 24, false);
+				numbernotecomboSpritelol.animation.addByPrefix('disappear', i + '_disappear', 24, false);
+				add(numbernotecomboSpritelol);
+				spritenoob.push(numbernotecomboSpritelol);
+				numbernotecomboSpritelol.animation.play('appear');
+				loop++;
+			}
+			for (i in 0...spritenoob.length){
+				new FlxTimer().start(0.7, function(tmr:FlxTimer) {
+					spritenoob[i].animation.play('disappear');
+					new FlxTimer().start(0.15, function(tmr:FlxTimer) {
+						spritenoob[i].visible = false;
+						spritenoob[i].active = false;
+					});
+				});
+			}
+			coolcombo = 0;
+			notecomboSpritelol.alpha = 1;
+			FlxG.sound.play(Paths.sound('noteComboSound'));
+			notecomboSpritelol.animation.play('appear');
+			focusfornotecombo = focusshit;
+		}
+
+		if(notecomboSpritelol.animation.finished) notecomboSpritelol.alpha = 0.00001;
 
 		switch (curStage)
 		{
@@ -2165,8 +2223,8 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
-		// God damn getting this fucking win anim to play is hell.
-		WinSpriteLol.animation.play('idle');
+		WinSpriteLol.visible = true;
+		WinSpriteLol.animation.play('winlol');
 		timeTxt.visible = false;
 		updateTime = false;
 
