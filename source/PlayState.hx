@@ -1865,8 +1865,10 @@ class PlayState extends MusicBeatState
 				iconP2.animation.curAnim.curFrame = 0;
 		}
 
-		if (FlxG.keys.justPressed.EIGHT)
-			FlxG.switchState(new AnimationDebug(SONG.player2));
+		if (FlxG.keys.justPressed.SEVEN)
+		{	
+			FlxG.switchState(new CrashState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+		}	
 
 		if (startingSong)
 		{

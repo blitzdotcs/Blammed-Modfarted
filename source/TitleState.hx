@@ -104,30 +104,6 @@ class TitleState extends MusicBeatState
 
 		FXEngineData.initSave();
 
-		#if CHECK_FOR_UPDATES
-		if(FXEngineData.checkForUpdates && !closedState) {
-			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/TyDevX/FX-Engine/main/gitVersion.txt");
-
-			http.onData = function (data:String)
-			{
-				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = engineVer.trim();
-				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
-				if(updateVersion != curVersion) {
-					trace('versions arent matching!');
-					mustUpdate = true;
-				}
-			}
-
-			http.onError = function (error) {
-				trace('error: $error');
-			}
-
-			http.request();
-		}
-		#end
-
 		Highscore.load();
 
 		colorShader = new ColorSwapEffect();
@@ -394,7 +370,7 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['TyDev']);
+				createCoolText(['Blitzdotcs']);
 			// credTextShit.visible = true;
 			case 3:
 				addMoreText('presents');
